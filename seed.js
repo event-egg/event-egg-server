@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const Event = require('./modules/eventModel.js');
+const User = require('./modules/userModel.js');
 
 async function seed() {
   mongoose.connect(process.env.DB_URL);
@@ -27,8 +28,21 @@ async function seed() {
   console.log('coffee with enemies');
   mongoose.disconnect();
 }
-seed();
 
+async function seedUser() {
+  mongoose.connect(process.env.DB_URL_USER);
+  await User.create({
+    name: 'Daniel',
+    email: 'daniel@gmail.com',
+    defaultCity: 'Oceanside, CA',
+    defaultInterests: ['videogames', 'cats', 'coffee'],
+    savedEvents: ['coffee with friends', 'coffee with enemies']
+  });
+  console.log('"Daniel, created" - God');
+  mongoose.disconnect();
+}
+seed();
+seedUser();
 // make sure server is NOT running
 // in terminal go to project root
 // type 'node seed.js'
