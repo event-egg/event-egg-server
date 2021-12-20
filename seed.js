@@ -26,11 +26,7 @@ async function seed() {
     image: 'thisidontcare.com'
   });
   console.log('coffee with enemies');
-  mongoose.disconnect();
-}
 
-async function seedUser() {
-  mongoose.connect(process.env.DB_URL_USER);
   await User.create({
     name: 'Daniel',
     email: 'daniel@gmail.com',
@@ -39,10 +35,16 @@ async function seedUser() {
     savedEvents: ['coffee with friends', 'coffee with enemies']
   });
   console.log('"Daniel, created" - God');
+
   mongoose.disconnect();
 }
+
+// async function seedUser() {
+//   mongoose.connect(process.env.DB_URL);
+//   mongoose.disconnect();
+// }
 seed();
-seedUser();
+// seedUser();
 // make sure server is NOT running
 // in terminal go to project root
 // type 'node seed.js'
