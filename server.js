@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
-const handleGetEvents = require ('./modules/events');
+const handleGetEvents = require ('./modules/getEvents');
 
 app.get('/events', handleGetEvents); // retrieves data
 // app.post(); // creates data

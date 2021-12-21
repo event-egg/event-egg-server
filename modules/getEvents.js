@@ -16,7 +16,7 @@ class Event {
       state: eventDataFull._embedded.venues[0].state.stateCode, // 'name' is also available instead
       zip: eventDataFull._embedded.venues[0].postalCode
     }
-    this.startTime = eventDataFull._embedded.venues.dates.start; // is an object of this form:
+    this.startTime = eventDataFull.dates.start.dateTime; // is an object of this form:
     /*
             "localDate": "2021-12-25",
             "localTime": "15:00:00",
@@ -29,8 +29,9 @@ class Event {
   }
 }
 
-function handleGetEvents(req, res) {
-  
+function handleGetEvents() {
+
+// console.log(mockdata._embedded.events[0].dates);
   const returnedEvents = mockdata._embedded.events;
   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
   console.log(eventsArray);
