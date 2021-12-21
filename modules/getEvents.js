@@ -1,5 +1,5 @@
 'use strict';
-
+const mockdata = require('./mockdata.js');
 // const verifyUser = require('../auth');
 
 class Event {
@@ -31,7 +31,7 @@ class Event {
 
 function handleGetEvents(req, res) {
   
-  const returnedEvents = response._embedded.events;
+  const returnedEvents = mockdata._embedded.events;
   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
   console.log(eventsArray);
 }
