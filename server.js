@@ -17,7 +17,6 @@ app.use(express.json());
 const PORT = process.env.PORT || 3001;
 const handleGetEvents = require ('./modules/getEvents');
 
-<<<<<<< Updated upstream
 mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection
 db.on('error', console.error.bind(console.Console, 'connection error:'));
@@ -26,14 +25,11 @@ db.once('open', function () {
 })
 
 app.get('/test', (req, res) => res.send('test works!'))
-app.get('/events', handleGetEvents); // retrieves data
+app.get('/events', handleGetEvents); // retrieves data from API
 app.get('/data-from-db', getEventData); // retrieves data
 // app.post('/user', createUser);
 app.post('/events/:id', postEvent); // creates data, when a user 'likes' an event, it will create an Event saved to their profile here in the DB
-=======
-app.get('/events', handleGetEvents); // retrieves data from API
-// app.post(); // creates data on DB
->>>>>>> Stashed changes
+
 // app.delete(); // deletes data
 // app.put(); // updates data
 
