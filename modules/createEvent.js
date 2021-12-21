@@ -3,7 +3,7 @@
 // const Event = require('../models/eventModel.js');
 const User = require('../models/userModel.js');
 
-async function postEvent(request, response) {
+async function createEvent(request, response) {
   // verifyUser(request, (err, user) => {
   //   if (err) {
   //     response.send('invalid token');
@@ -24,4 +24,4 @@ async function postEvent(request, response) {
   // })
 }
 
-module.exports = postEvent;
+module.exports = createEvent;
