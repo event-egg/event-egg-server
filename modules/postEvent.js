@@ -8,15 +8,15 @@ async function postEvent(request, response) {
   //   if (err) {
   //     response.send('invalid token');
   //   } else {
+  const { id } = request.params;
   try {
-    // const madeEvent = await Event.create({ ...request.body }); // email: user.email, add this later after verification
-    const worked = await User.findByIdAndUpdate("61c203d438ce64efd20c215b", {
+    const worked = await User.findByIdAndUpdate(id, {
       $push: {
         savedEvents: { ...request.body }
       }
     })
-    console.log(worked);
-    response.status(200).send(worked);
+    console.log('worked');
+    response.status(200).send('worked');
   } catch (err) {
     response.status(500).send('server error');
   }

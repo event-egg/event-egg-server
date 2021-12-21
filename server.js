@@ -26,9 +26,9 @@ db.once('open', function () {
 
 app.get('/test', (req, res) => res.send('test works!'))
 app.get('/events', handleGetEvents); // retrieves data
-app.get('/events-from-db', getEventData); // retrieves data
+app.get('/data-from-db', getEventData); // retrieves data
 // app.post('/user', createUser);
-app.post('/events', postEvent); // creates data, when a user 'likes' an event, it will create an Event saved to their profile here in the DB
+app.post('/events/:id', postEvent); // creates data, when a user 'likes' an event, it will create an Event saved to their profile here in the DB
 // app.delete(); // deletes data
 // app.put(); // updates data
 
