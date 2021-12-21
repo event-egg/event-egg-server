@@ -36,6 +36,23 @@ response = {
         "timezone": "America/Phoenix",
         "spanMultipleDays": false  
         }
+        _embedded: {
+          venues: [
+            {
+             name,
+             id,
+             url,
+             images: [],
+             postalCode,
+             timeZone,
+             city,
+             state,
+             country,
+             address,
+             
+            }
+          ]
+        }
 
       },
       {},
@@ -43,3 +60,21 @@ response = {
     ]
   }
 }
+
+## TO DO ITEMS FOR PROJECT BOARD
+client logs in-->
+Create new user preferences 
+Update preferences
+Removing un-favorited events from user object using DELETE method (find by event id and delete)
+Stretch: Delete user
+Auth0 implementation across all
+API
+  build query string based on user search/preferences/parameters
+  cache (or return?) next page of search results upon search to 
+
+## DONE:
+create new user with post
+get user from DB (using email address to search collection)
+
+## STRETCH:
+save queries to user profile and render these past queries when search bar is used

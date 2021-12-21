@@ -4,10 +4,10 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   name: String,
-  email: String,
   defaultCity: String,
   defaultInterests: Array,
-  savedEvents: Array
+  savedEvents: Array,
+  email: String
   // profilePic: user photo from AuthO?
 })
 

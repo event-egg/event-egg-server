@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const Event = require('./modules/eventModel');
+const Event = require('./models/eventModel.js');
+const User = require('./models/userModel.js');
 
 async function clear() {
   mongoose.connect(process.env.DB_URL);
   try {
     await Event.deleteMany({});
-    console.log('events cleared');
+    await User.deleteMany({});
+    console.log('events/users cleared');
   } catch (err) {
     console.error(err);
   } finally {
