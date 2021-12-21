@@ -30,11 +30,23 @@ class Event {
     */
   }
 }
-//TODO construct this URL using variables
+//TODO construct this URL using variables from user's search, preferences, and search parameters
+/*
+Client side:
+conditional query assembly
+From client signin: 
+  location: String,
+  keywords: String, //for the API
+From client search:
+  date: String optional,
+  keywords: 
+*/
+
 async function handleGetEvents(req, res) {
   const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?apikey=${process.env.TM_API_KEY}`);
   const returnedEvents = apiResponse.data._embedded.events;
   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
+  // Do something with eventsArray
 }
 
 module.exports = handleGetEvents;
