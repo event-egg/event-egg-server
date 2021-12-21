@@ -36,6 +36,23 @@ response = {
         "timezone": "America/Phoenix",
         "spanMultipleDays": false  
         }
+        _embedded: {
+          venues: [
+            {
+             name,
+             id,
+             url,
+             images: [],
+             postalCode,
+             timeZone,
+             city,
+             state,
+             country,
+             address,
+             
+            }
+          ]
+        }
 
       },
       {},

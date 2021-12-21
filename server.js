@@ -15,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
+const handleGetEvents = require ('./modules/getEvents');
 
 mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection
@@ -24,9 +25,8 @@ db.once('open', function () {
 })
 
 app.get('/test', (req, res) => res.send('test works!'))
-app.get('/events', getEventData); // retrieves data
+app.get('/events', handleGetEvents); // retrieves data
 // app.post('/user', createUser);
-// // app.get('/user', getUserData); // retrieves user data    
 // app.post('/events', postEvent); // creates data, when a user 'likes' an event, it will create an Event saved to their profile here in the DB
 // app.delete(); // deletes data
 // app.put(); // updates data
