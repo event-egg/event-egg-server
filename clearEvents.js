@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const Event = require('./modules/eventModel');
+const Event = require('./models/eventModel');
 
 async function clear() {
   mongoose.connect(process.env.DB_URL);
