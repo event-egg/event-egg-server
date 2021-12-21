@@ -3,7 +3,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Event = require('./modules/eventModel.js');
-// const User = require('./modules/userModel.js');
+const User = require('./modules/userModel.js');
 
 async function seed() {
   mongoose.connect(process.env.DB_URL);
@@ -30,14 +30,14 @@ async function seed() {
   });
   console.log('coffee with enemies');
 
-  // await User.create({
-  //   name: 'Daniel',
-  //   email: 'daniel@gmail.com',
-  //   defaultCity: 'Oceanside, CA',
-  //   defaultInterests: ['videogames', 'cats', 'coffee'],
-  //   savedEvents: ['coffee with friends', 'coffee with enemies']
-  // });
-  // console.log('"Daniel, created" - God');
+  await User.create({
+    name: 'Daniel',
+    email: 'daniel@gmail.com',
+    defaultCity: 'Oceanside, CA',
+    defaultInterests: ['videogames', 'cats', 'coffee'],
+    savedEvents: ['coffee with friends', 'coffee with enemies']
+  });
+  console.log('"Daniel, created" - God');
 
   mongoose.disconnect();
 }
