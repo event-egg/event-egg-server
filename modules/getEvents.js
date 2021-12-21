@@ -1,4 +1,6 @@
 'use strict';
+
+const axios = require('axios');
 const mockdata = require('./mockdata.js');
 // const verifyUser = require('../auth');
 
@@ -28,13 +30,11 @@ class Event {
     */
   }
 }
-
-function handleGetEvents() {
-
-// console.log(mockdata._embedded.events[0].dates);
-  const returnedEvents = mockdata._embedded.events;
+//TODO construct this URL using variables
+async function handleGetEvents(req, res) {
+  const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?apikey=${process.env.TM_API_KEY}`);
+  const returnedEvents = apiResponse.data._embedded.events;
   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
-  console.log(eventsArray);
 }
 
 module.exports = handleGetEvents;
