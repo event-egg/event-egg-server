@@ -19,8 +19,7 @@ class Event {
       city: eventDataFull._embedded.venues[0].city.name ? eventDataFull._embedded.venues[0].city.name : "Undefined",
       state: eventDataFull._embedded.venues[0].state.stateCode ? eventDataFull._embedded.venues[0].state.stateCode : "Undefined", // 'name' is also available instead
       zip: eventDataFull._embedded.venues[0].postalCode ? eventDataFull._embedded.venues[0].postalCode : "Undefined"
-      } :
-      {
+      } : {
         venueName:  "Undefined",
         street: "Undefined",
         city: "Undefined",
