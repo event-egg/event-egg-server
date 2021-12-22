@@ -10,8 +10,7 @@ async function getUserData(request, response) {
   const { email } = request.query;
   try {
     let retrievedUser = await User.findOne({ email: email });
-    console.log(retrievedUser);
-    response.status(200).send(retrievedUser);
+    retrievedUser === null ? response.status(200).send({}) : response.status(200).send(retrievedUser);
   } catch (err) {
     console.log(err);
     response.status(500).send('server error');

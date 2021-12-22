@@ -7,7 +7,6 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-
 const getUserData = require('./modules/getUserData.js');
 const createEvent = require('./modules/createEvent.js');
 const createUser = require('./modules/createUser.js');
