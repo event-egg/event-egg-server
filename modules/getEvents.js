@@ -2,23 +2,38 @@
 
 const axios = require('axios');
 const mockdata = require('./mockdata.js');
-// const verifyUser = require('../auth');
+// const verifyUser = require('./auth');
 
+// Ternary to check if property exists in API response, if not set to undefined
 class Event {
   constructor(eventDataFull) {
-    this.name = eventDataFull.name;
-    this.id = eventDataFull.id; // TicketMaster event id, not mongodb id
-    this.link = eventDataFull.url;
-    this.image = eventDataFull.images[0]; // there are others available
-    this.description = eventDataFull.info;
-    this.address = {
-      venueName: eventDataFull._embedded.venues[0].name,
-      street: eventDataFull._embedded.venues[0].address.line1,
-      city: eventDataFull._embedded.venues[0].city.name,
-      state: eventDataFull._embedded.venues[0].state.stateCode, // 'name' is also available instead
-      zip: eventDataFull._embedded.venues[0].postalCode
-    }
-    this.startTime = eventDataFull.dates.start.dateTime; // is an object of this form:
+    this.name = eventDataFull.name ? eventDataFull.name : "Undefined";
+    this.id = eventDataFull.id ? eventDataFull.id : "Undefined"; // TicketMaster event id, not mongodb id
+    this.link = eventDataFull.url ? eventDataFull.url : "Undefined";
+    this.image = eventDataFull.images[0] ? eventDataFull.images[0] : "Undefined"; // there are others available
+    this.description = eventDataFull.info ? eventDataFull.info : "Undefined";
+    this.address = eventDataFull._embedded ? eventDataFull._embedded.venues ? 
+      {
+      venueName: eventDataFull._embedded.venues[0].name  ? eventDataFull._embedded.venues[0].name : "Undefined",
+      street: eventDataFull._embedded.venues[0].address ? eventDataFull._embedded.venues[0].address : "Undefined",
+      city: eventDataFull._embedded.venues[0].city.name ? eventDataFull._embedded.venues[0].city.name : "Undefined",
+      state: eventDataFull._embedded.venues[0].state.stateCode ? eventDataFull._embedded.venues[0].state.stateCode : "Undefined", // 'name' is also available instead
+      zip: eventDataFull._embedded.venues[0].postalCode ? eventDataFull._embedded.venues[0].postalCode : "Undefined"
+      } :
+      {
+        venueName:  "Undefined",
+        street: "Undefined",
+        city: "Undefined",
+        state: "Undefined", // 'name' is also available instead
+        zip: "Undefined"
+      } : {
+        venueName:  "Undefined",
+        street: "Undefined",
+        city: "Undefined",
+        state: "Undefined", // 'name' is also available instead
+        zip: "Undefined"
+      };
+    this.startTime = eventDataFull.dates.start.dateTime || "Undefined"; // is an object of this form:
     /*
             "localDate": "2021-12-25",
             "localTime": "15:00:00",
@@ -43,10 +58,12 @@ From client search:
 */
 
 async function handleGetEvents(req, res) {
-  const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?apikey=${process.env.TM_API_KEY}`);
+  console.log(req.query.keyword);
+  const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${req.query.keyword}&apikey=${process.env.TM_API_KEY}`);
+  console.log(apiResponse.data);
   const returnedEvents = apiResponse.data._embedded.events;
   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
-  // Do something with eventsArray
+  res.status(200).send(eventsArray);
 }
 
 module.exports = handleGetEvents;
