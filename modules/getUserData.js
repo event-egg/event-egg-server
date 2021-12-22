@@ -9,11 +9,14 @@ async function getUserData(request, response) {
   //   } else {
   const { email } = request.query;
   try {
-    let retrievedEvents = await User.find({ email });
-    response.status(200).send(retrievedEvents);
+    let retrievedUser = await User.findOne({ email: email });
+    console.log(retrievedUser);
+    response.status(200).send(retrievedUser);
   } catch (err) {
+    console.log(err);
     response.status(500).send('server error');
   }
+
   //   }
   // })
 }
