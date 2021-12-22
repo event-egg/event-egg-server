@@ -12,6 +12,7 @@ const getUserData = require('./modules/getUserData.js');
 const createEvent = require('./modules/createEvent.js');
 const createUser = require('./modules/createUser.js');
 const deleteUser = require('./modules/deleteUser.js');
+const updateUser = require('./modules/updateUser.js');
 const handleGetEvents = require('./modules/getEvents');
 
 const app = express();
@@ -34,7 +35,7 @@ app.get('/user', getUserData); // retrieves data for just one user from DB
 app.post('/user', createUser); // creates user on DB
 app.post('/events/:id', createEvent); // creates data, when a user 'likes' an event, it will create an Event saved to their profile here in the DB
 app.delete('/user/:id', deleteUser); // deletes data
-// app.put('/user/:id', updateUserPreferences); // updates data
+app.put('/user/:id', updateUser); // updates data
 
 async function handleTest(req, res){
   verifyUser(req, async (err, user) => {
