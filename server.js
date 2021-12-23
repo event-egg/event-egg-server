@@ -35,6 +35,7 @@ app.get('/user', getUserData); // retrieves data for just one user from DB
 app.post('/user', createUser); // creates user on DB
 app.post('/events/:id', createEvent); // creates event inside of User instance. ID passed in is Users
 app.delete('/user/:id', deleteUser); // deletes data
+app.delete('/events/:id', deleteEvent); // deletes data
 app.patch('/user/:id', updateUser); // updates data
 
 async function handleTest(req, res){
