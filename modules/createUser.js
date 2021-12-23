@@ -5,6 +5,7 @@ const User = require('../models/userModel.js');
 async function createUser(request, response) {
   // verifyUser(request, (err, user) => {
   //   if (err) {
+  //     response.status(500).send(err);
   //     response.send('invalid token');
   //   } else {
   try {

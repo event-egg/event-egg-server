@@ -3,6 +3,7 @@
 const User = require('../models/userModel.js');
 
 async function getUserData(request, response) {
+  console.log('get hit')
   // verifyUser(request, async (err, user) => {
   //   if (err) {
   //     response.send('invalid token');
