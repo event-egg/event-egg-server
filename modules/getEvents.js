@@ -2,7 +2,7 @@
 
 const axios = require('axios');
 const mockdata = require('./mockdata.js');
-// const verifyUser = require('./auth');
+const verifyUser = require('../auth');
 
 // Ternary to check if property exists in API response, if not set to undefined
 class Event {
@@ -17,7 +17,7 @@ class Event {
       venueName: eventDataFull._embedded.venues[0].name  ? eventDataFull._embedded.venues[0].name : "Undefined",
       street: eventDataFull._embedded.venues[0].address ? eventDataFull._embedded.venues[0].address : "Undefined",
       city: eventDataFull._embedded.venues[0].city.name ? eventDataFull._embedded.venues[0].city.name : "Undefined",
-      state: eventDataFull._embedded.venues[0].state.stateCode ? eventDataFull._embedded.venues[0].state.stateCode : "Undefined", // 'name' is also available instead
+      state: eventDataFull._embedded.venues[0].state ? eventDataFull._embedded.venues[0].state : "Undefined", // 'name' is also available instead
       zip: eventDataFull._embedded.venues[0].postalCode ? eventDataFull._embedded.venues[0].postalCode : "Undefined"
       } : {
         venueName:  "Undefined",
@@ -44,7 +44,7 @@ class Event {
     */
   }
 }
-//TODO construct this URL using variables from user's search, preferences, and search parameters
+//TODO: construct this URL using variables from user's search, preferences, and search parameters
 /*
 Client side:
 conditional query assembly
@@ -56,13 +56,30 @@ From client search:
   keywords: 
 */
 
+//TODO: parse getEvents query from client (parse through user event preferences array), then query TM API
+
 async function handleGetEvents(req, res) {
-  console.log(req.query.keyword);
-  const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${req.query.keyword}&apikey=${process.env.TM_API_KEY}`);
-  console.log(apiResponse.data);
-  const returnedEvents = apiResponse.data._embedded.events;
-  const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
-  res.status(200).send(eventsArray);
+  console.log('get hit')
+  verifyUser(req, async (err, user) => {
+    if (err) {
+        res.send('invalid token');
+    } else {
+      const keyword = req.query.keyword;
+      // console.log('req.query: ', req.query);
+      try {
+        console.log('keyword:', keyword);
+        const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${keyword}&apikey=${process.env.TM_API_KEY}`);
+        console.log(apiResponse.data);
+        const returnedEvents = apiResponse.data._embedded.events;
+        const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
+        res.status(200).send(eventsArray);
+
+      } catch (err) {
+        console.log(err);
+        res.status(500).send('server error');
+      }
+    }
+  })
 }
 
 module.exports = handleGetEvents;
