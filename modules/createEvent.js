@@ -1,27 +1,27 @@
 'use strict';
-
-// const Event = require('../models/eventModel.js');
 const User = require('../models/userModel.js');
+const verifyUser = require('../auth');
 
 async function createEvent(request, response) {
-  // verifyUser(request, async (err, user) => {
-  //   if (err) {
-  //     response.send('invalid token');
-  //   } else {
-  const { id } = request.params;
-  try {
-    const worked = await User.findByIdAndUpdate(id, {
-      $push: {
-        savedEvents: { ...request.body }
+
+  verifyUser(request, async (err, user) => {
+    if (err) {
+      response.send('Invalid Token');
+    } else {
+      const { id } = request.params;
+      try {
+        const updatedUserAndEvents = await User.findByIdAndUpdate(id, {
+          $push: {
+            savedEvents: { ...request.body }
+          }
+        })
+        console.log('worked');
+        response.status(200).send(updatedUserAndEvents);
+      } catch (e) {
+        response.status(500).send('Server Error');
       }
-    })
-    console.log('worked');
-    response.status(200).send('worked');
-  } catch (err) {
-    response.status(500).send('server error');
-  }
-  //   }
-  // })
+    }
+  })
 }
 
 module.exports = createEvent;
