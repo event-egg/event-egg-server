@@ -4,7 +4,7 @@
 const User = require('../models/userModel.js');
 
 async function createEvent(request, response) {
-  // verifyUser(request, (err, user) => {
+  // verifyUser(request, async (err, user) => {
   //   if (err) {
   //     response.send('invalid token');
   //   } else {

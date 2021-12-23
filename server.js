@@ -1,7 +1,5 @@
 'use strict';
 
-const verifyUser = require('./auth');
-
 require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
@@ -16,7 +14,10 @@ const handleGetEvents = require('./modules/getEvents');
 
 const app = express();
 app.use(cors());
+app.options('*', cors());  //<--------- Had to add to get auth0 working
 app.use(express.json());
+
+const verifyUser = require('./auth');
 
 const PORT = process.env.PORT || 3001;
 
@@ -44,7 +45,7 @@ async function handleTest(req, res){
     } else { 
       try {
       console.log('test works!');
-      res.send(res.send('test works!'));
+      res.status(200).send('test works!');
       } catch (e) {
         res.status(500).send('Server Error');
       }
