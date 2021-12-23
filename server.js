@@ -33,7 +33,7 @@ app.get('/test', handleTest);
 app.get('/events', handleGetEvents); // retrieves data from API
 app.get('/user', getUserData); // retrieves data for just one user from DB
 app.post('/user', createUser); // creates user on DB
-app.post('/events/:id', createEvent); // creates data, when a user 'likes' an event, it will create an Event saved to their profile here in the DB
+app.post('/events/:id', createEvent); // creates event inside of User instance. ID passed in is Users
 app.delete('/user/:id', deleteUser); // deletes data
 app.patch('/user/:id', updateUser); // updates data
 
