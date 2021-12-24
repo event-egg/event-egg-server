@@ -2,7 +2,7 @@
 const User = require('../models/userModel.js');
 const verifyUser = require('../auth');
 
-async function createEvent(request, response) {
+async function deleteEvent(request, response) {
 
   verifyUser(request, async (err, user) => {
     if (err) {
@@ -11,11 +11,11 @@ async function createEvent(request, response) {
       const { id } = request.params;
       try {
         const updatedUserAndEvents = await User.findByIdAndUpdate(id, {
-          $push: {
+          $pull: {
             savedEvents: { ...request.body }
           }
         }, {new: true})
-        console.log('UpdatedUandE:', updatedUserAndEvents);
+        console.log('deleted');
         response.status(200).send(updatedUserAndEvents);
       } catch (e) {
         response.status(500).send('Server Error');
@@ -24,4 +24,4 @@ async function createEvent(request, response) {
   })
 }
 
-module.exports = createEvent;
+module.exports = deleteEvent;

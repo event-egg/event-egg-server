@@ -8,8 +8,9 @@ const mongoose = require('mongoose');
 const getUserData = require('./modules/getUserData.js');
 const createEvent = require('./modules/createEvent.js');
 const createUser = require('./modules/createUser.js');
-const deleteUser = require('./modules/deleteUser.js');
 const updateUser = require('./modules/updateUser.js');
+const deleteUser = require('./modules/deleteUser.js');
+const deleteEvent = require('./modules/deleteEvent.js');
 const handleGetEvents = require('./modules/getEvents');
 
 const app = express();
@@ -35,6 +36,7 @@ app.get('/user', getUserData); // retrieves data for just one user from DB
 app.post('/user', createUser); // creates user on DB
 app.post('/events/:id', createEvent); // creates event inside of User instance. ID passed in is Users
 app.delete('/user/:id', deleteUser); // deletes data
+app.delete('/events/:id', deleteEvent); // deletes data
 app.patch('/user/:id', updateUser); // updates data
 
 async function handleTest(req, res){
