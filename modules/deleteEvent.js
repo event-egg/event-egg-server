@@ -14,7 +14,7 @@ async function deleteEvent(request, response) {
           $pull: {
             savedEvents: { ...request.body }
           }
-        })
+        }, {new: true})
         console.log('deleted');
         response.status(200).send(updatedUserAndEvents);
       } catch (e) {
@@ -24,4 +24,4 @@ async function deleteEvent(request, response) {
   })
 }
 
-module.exports = createEvent;
+module.exports = deleteEvent;

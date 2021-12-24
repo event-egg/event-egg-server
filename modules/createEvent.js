@@ -14,8 +14,8 @@ async function createEvent(request, response) {
           $push: {
             savedEvents: { ...request.body }
           }
-        })
-        console.log('worked');
+        }, {new: true})
+        console.log('UpdatedUandE:', updatedUserAndEvents);
         response.status(200).send(updatedUserAndEvents);
       } catch (e) {
         response.status(500).send('Server Error');

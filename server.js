@@ -8,8 +8,9 @@ const mongoose = require('mongoose');
 const getUserData = require('./modules/getUserData.js');
 const createEvent = require('./modules/createEvent.js');
 const createUser = require('./modules/createUser.js');
-const deleteUser = require('./modules/deleteUser.js');
 const updateUser = require('./modules/updateUser.js');
+const deleteUser = require('./modules/deleteUser.js');
+const deleteEvent = require('./modules/deleteEvent.js');
 const handleGetEvents = require('./modules/getEvents');
 
 const app = express();
