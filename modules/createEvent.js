@@ -2,23 +2,23 @@
 const User = require('../models/userModel.js');
 const verifyUser = require('../auth');
 
-async function createEvent(request, response) {
+async function createEvent(req, res) {
 
-  verifyUser(request, async (err, user) => {
+  verifyUser(req, async (err, user) => {
     if (err) {
-      response.send('Invalid Token');
+      res.send('Invalid Token');
     } else {
-      const { id } = request.params;
+      const { id } = req.params;
       try {
         const updatedUserAndEvents = await User.findByIdAndUpdate(id, {
           $push: {
-            savedEvents: { ...request.body }
+            savedEvents: { ...req.body }
           }
         }, {new: true})
         console.log('UpdatedUandE:', updatedUserAndEvents);
-        response.status(200).send(updatedUserAndEvents);
+        res.status(200).send(updatedUserAndEvents);
       } catch (e) {
-        response.status(500).send('Server Error');
+        res.status(500).send('Server Error');
       }
     }
   })
