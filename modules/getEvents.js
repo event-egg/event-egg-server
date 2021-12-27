@@ -58,31 +58,27 @@ From client search:
 
 //TODO: parse getEvents query from client (parse through user event preferences array), then query TM API
 
-fetchEventInfo = async () => {
-
-}
-
-const fetchGithubInfo = async (url) => {
-  console.log(`Fetching ${url}`)
-  const githubInfo = await axios(url) // API call to get user info from Github.
-  return {
-    name: githubInfo.data.name,
-    bio: githubInfo.data.bio,
-    repos: githubInfo.data.public_repos
-  }
-}
 
 // Iterates all users and returns their Github info.
-const fetchUserInfo = async (names) => {
-  const requests = names.map((name) => {
-    const url = `https://api.github.com/users/${name}`
-    return fetchGithubInfo(url) // Async function that fetches the user info.
-      .then((a) => {
-        return a // Returns the user info.
-      })
+const requestTMInfo = async (url) => {
+  console.log(`Requesting ${url}`);
+  const eventInfo = await axios(url);
+  const returnedEvents = eventInfo.data._embedded.events
+  const formattedEventsArray = returnedEvents.map(eventObj => new Event(eventObj));
+  return formattedEventsArray
+}
+
+const requestInterestInfo = async (interests, city) => {
+  const requests = interests.map((interest) => {
+    const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&apikey=${process.env.TM_API_KEY}`;
+    return requestTMInfo(url) // Async function that gets the TM info from API
+     .then((a) => {
+      return a // Returns the info.
+      }).catch(() => console.log("Oi! No Gooda"))
   })
   return Promise.all(requests) // Waiting for all the requests to get resolved.
 }
+
 
 async function handleGetEvents(req, res) {
   console.log('get hit')
@@ -93,38 +89,23 @@ async function handleGetEvents(req, res) {
       console.log('req.body: ', req.body);
       const { city } = req.body;
       const { interests } = req.body;
-
-      const returnedEvents = await axios(url)
-
-      const requests = interests.map(interest => {
-        const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&apikey=${process.env.TM_API_KEY}`;
-        return axios(url).then(response => response.data);
-      })
-
-      const returnedEvents = Promise.all(requests);
-      res.status(200).send(returnedEvents);
-
-
-      // try {
-      //   Promise.all(interests).then(values => {
-      //     console.log(values)
-      //   })
-      //   interests.forEach(interest => {
-      //     console.log('req interest', interest);
-      //     const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&apikey=${process.env.TM_API_KEY}`);
-      //     returnedEvents.push(apiResponse.data._embedded.events)
-      //   });
-
-
-      //   // console.log(apiResponse.data);
-      //   const returnedEvents = apiResponse.data._embedded.events;
-      //   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
-      //   res.status(200).send(eventsArray);
-
-      // } catch (err) {
-      //   console.log(err);
-      //   res.status(500).send('server error');
-      // }
+      let returnedEvents = [];
+      try {
+        requestInterestInfo(interests, city)
+          .then( returned => {
+            returned.forEach(returnedEventArray => returnedEvents = [...returnedEventArray, ...returnedEvents])
+            }) 
+          .then(() => returnedEvents.sort( (a, b) => {
+            var c = new Date(a.startTime);
+            var d = new Date(b.startTime);
+            return c-d;
+          }))
+          .then(() => res.status(200).send(returnedEvents))
+        
+      } catch (err) {
+        console.log(err);
+        res.status(500).send('server error');
+      }
     }
   })
 }
