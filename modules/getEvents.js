@@ -65,10 +65,12 @@ async function handleGetEvents(req, res) {
         res.send('invalid token');
     } else {
       const keyword = req.query.keyword;
+      const { city } = req.body;
+      console.log(city, req.body);
       // console.log('req.query: ', req.query);
       try {
         console.log('keyword:', keyword);
-        const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${keyword}&apikey=${process.env.TM_API_KEY}`);
+        const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${city}&apikey=${process.env.TM_API_KEY}`);
         console.log(apiResponse.data);
         const returnedEvents = apiResponse.data._embedded.events;
         const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
