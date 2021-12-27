@@ -61,11 +61,15 @@ From client search:
 
 // Iterates all users and returns their Github info.
 const requestTMInfo = async (url) => {
-  console.log(`Requesting ${url}`);
-  const eventInfo = await axios(url);
-  const returnedEvents = eventInfo.data._embedded.events
-  const formattedEventsArray = returnedEvents.map(eventObj => new Event(eventObj));
-  return formattedEventsArray
+  try{
+    console.log(`Requesting ${url}`);
+    const eventInfo = await axios(url);
+    const returnedEvents = eventInfo.data._embedded.events
+    const formattedEventsArray = returnedEvents.map(eventObj => new Event(eventObj));
+    return formattedEventsArray
+  } catch (e) {
+    return []
+  }
 }
 
 const requestInterestInfo = async (interests, city) => {
@@ -74,7 +78,7 @@ const requestInterestInfo = async (interests, city) => {
     return requestTMInfo(url) // Async function that gets the TM info from API
      .then((a) => {
       return a // Returns the info.
-      }).catch(() => console.log("Oi! No Gooda"))
+      }).catch(() => console.log("An error occured when requesting interest info..."))
   })
   return Promise.all(requests) // Waiting for all the requests to get resolved.
 }
@@ -92,7 +96,8 @@ async function handleGetEvents(req, res) {
       let returnedEvents = [];
       try {
         requestInterestInfo(interests, city)
-          .then( returned => {
+          .then( returned => { 
+
             returned.forEach(returnedEventArray => returnedEvents = [...returnedEventArray, ...returnedEvents])
             }) 
           .then(() => returnedEvents.sort( (a, b) => {
@@ -100,8 +105,9 @@ async function handleGetEvents(req, res) {
             var d = new Date(b.startTime);
             return c-d;
           }))
-          .then(() => res.status(200).send(returnedEvents))
-        
+          .then(() => returnedEvents.length > 0 ? 
+            res.status(200).send(returnedEvents) : 
+            res.status(500).send('server error'))       
       } catch (err) {
         console.log(err);
         res.status(500).send('server error');
