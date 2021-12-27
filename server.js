@@ -31,7 +31,7 @@ db.once('open', function () {
 
 // app.get('/test', (req, res) => res.send('test works!'))
 app.get('/test', handleTest);
-app.get('/events', handleGetEvents); // retrieves data from API
+app.post('/events', handleGetEvents); // retrieves data from API
 app.get('/user', getUserData); // retrieves data for just one user from DB
 app.post('/user', createUser); // creates user on DB
 app.post('/events/:id', createEvent); // creates event inside of User instance. ID passed in is Users
