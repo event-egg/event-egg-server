@@ -58,29 +58,73 @@ From client search:
 
 //TODO: parse getEvents query from client (parse through user event preferences array), then query TM API
 
+fetchEventInfo = async () => {
+
+}
+
+const fetchGithubInfo = async (url) => {
+  console.log(`Fetching ${url}`)
+  const githubInfo = await axios(url) // API call to get user info from Github.
+  return {
+    name: githubInfo.data.name,
+    bio: githubInfo.data.bio,
+    repos: githubInfo.data.public_repos
+  }
+}
+
+// Iterates all users and returns their Github info.
+const fetchUserInfo = async (names) => {
+  const requests = names.map((name) => {
+    const url = `https://api.github.com/users/${name}`
+    return fetchGithubInfo(url) // Async function that fetches the user info.
+      .then((a) => {
+        return a // Returns the user info.
+      })
+  })
+  return Promise.all(requests) // Waiting for all the requests to get resolved.
+}
+
 async function handleGetEvents(req, res) {
   console.log('get hit')
   verifyUser(req, async (err, user) => {
     if (err) {
         res.send('invalid token');
     } else {
-      // const keyword = req.query.keyword;
-      // const { city } = req.query;
       console.log('req.body: ', req.body);
       const { city } = req.body;
-      try {
-        console.log('req whole', req.body);
-        // console.log('keyword:', keyword);
-        const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${city}&apikey=${process.env.TM_API_KEY}`);
-        // console.log(apiResponse.data);
-        const returnedEvents = apiResponse.data._embedded.events;
-        const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
-        res.status(200).send(eventsArray);
+      const { interests } = req.body;
 
-      } catch (err) {
-        console.log(err);
-        res.status(500).send('server error');
-      }
+      const returnedEvents = await axios(url)
+
+      const requests = interests.map(interest => {
+        const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&apikey=${process.env.TM_API_KEY}`;
+        return axios(url).then(response => response.data);
+      })
+
+      const returnedEvents = Promise.all(requests);
+      res.status(200).send(returnedEvents);
+
+
+      // try {
+      //   Promise.all(interests).then(values => {
+      //     console.log(values)
+      //   })
+      //   interests.forEach(interest => {
+      //     console.log('req interest', interest);
+      //     const apiResponse = await axios(`${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&apikey=${process.env.TM_API_KEY}`);
+      //     returnedEvents.push(apiResponse.data._embedded.events)
+      //   });
+
+
+      //   // console.log(apiResponse.data);
+      //   const returnedEvents = apiResponse.data._embedded.events;
+      //   const eventsArray = returnedEvents.map(eventObj => new Event(eventObj));
+      //   res.status(200).send(eventsArray);
+
+      // } catch (err) {
+      //   console.log(err);
+      //   res.status(500).send('server error');
+      // }
     }
   })
 }
