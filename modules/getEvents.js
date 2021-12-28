@@ -78,7 +78,7 @@ const requestTMInfo = async (url) => {
 const requestInterestInfo = async (interests, city, date) => {
   // Maps through our interests, formats the URL for the request and calls requestTMInfo which makes an API call for each interest
   const requests = interests.map((interest) => {
-    const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&localStartDateTime=${date}&sort=date,asc&apikey=${process.env.TM_API_KEY}`;
+    const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&localStartDateTime=${date},*&sort=date,asc&apikey=${process.env.TM_API_KEY}`;
     return requestTMInfo(url) // Async function that gets the TM info from API
       .then((a) => {
         return a // Returns the info.
