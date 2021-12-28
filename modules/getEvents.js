@@ -32,8 +32,8 @@ class Event {
       state: "Undefined", // 'name' is also available instead
       zip: "Undefined"
     };
-    this.startTime = eventDataFull.dates.start.dateTime || "Undefined";
-    this.localTime = eventDataFull.dates.start.localTime || "Undefined";
+    this.startTime = eventDataFull.dates.start.dateTime || "Undefined"; // this is Greenwich, England time @ prime meridian, 8hrs ahead of the time in Los Angeles
+    this.localTime = eventDataFull.dates.start.localTime || "Undefined"; 
     this.localDate = eventDataFull.dates.start.localDate || "Undefined";
 
     /*
