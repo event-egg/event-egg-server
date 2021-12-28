@@ -12,26 +12,26 @@ class Event {
     this.link = eventDataFull.url ? eventDataFull.url : "Undefined";
     this.image = eventDataFull.images[0] ? eventDataFull.images[0] : "Undefined"; // there are others available
     this.description = eventDataFull.info ? eventDataFull.info : "Undefined";
-    this.address = eventDataFull._embedded ? eventDataFull._embedded.venues ? 
+    this.address = eventDataFull._embedded ? eventDataFull._embedded.venues ?
       {
-      venueName: eventDataFull._embedded.venues[0].name  ? eventDataFull._embedded.venues[0].name : "Undefined",
-      street: eventDataFull._embedded.venues[0].address ? eventDataFull._embedded.venues[0].address : "Undefined",
-      city: eventDataFull._embedded.venues[0].city.name ? eventDataFull._embedded.venues[0].city.name : "Undefined",
-      state: eventDataFull._embedded.venues[0].state ? eventDataFull._embedded.venues[0].state : "Undefined", // 'name' is also available instead
-      zip: eventDataFull._embedded.venues[0].postalCode ? eventDataFull._embedded.venues[0].postalCode : "Undefined"
+        venueName: eventDataFull._embedded.venues[0].name ? eventDataFull._embedded.venues[0].name : "Undefined",
+        street: eventDataFull._embedded.venues[0].address ? eventDataFull._embedded.venues[0].address : "Undefined",
+        city: eventDataFull._embedded.venues[0].city.name ? eventDataFull._embedded.venues[0].city.name : "Undefined",
+        state: eventDataFull._embedded.venues[0].state ? eventDataFull._embedded.venues[0].state : "Undefined", // 'name' is also available instead
+        zip: eventDataFull._embedded.venues[0].postalCode ? eventDataFull._embedded.venues[0].postalCode : "Undefined"
       } : {
-        venueName:  "Undefined",
+        venueName: "Undefined",
         street: "Undefined",
         city: "Undefined",
         state: "Undefined", // 'name' is also available instead
         zip: "Undefined"
       } : {
-        venueName:  "Undefined",
-        street: "Undefined",
-        city: "Undefined",
-        state: "Undefined", // 'name' is also available instead
-        zip: "Undefined"
-      };
+      venueName: "Undefined",
+      street: "Undefined",
+      city: "Undefined",
+      state: "Undefined", // 'name' is also available instead
+      zip: "Undefined"
+    };
     this.startTime = eventDataFull.dates.start.dateTime || "Undefined"; // is an object of this form:
     /*
             "localDate": "2021-12-25",
@@ -61,7 +61,7 @@ From client search:
 
 // Makes the API call for each interest, formats the returned data
 const requestTMInfo = async (url) => {
-  try{
+  try {
     console.log(`Requesting ${url}`);
     const eventInfo = await axios(url);
     const returnedEvents = eventInfo.data._embedded.events
@@ -72,13 +72,13 @@ const requestTMInfo = async (url) => {
   }
 }
 
-const requestInterestInfo = async (interests, city) => {
+const requestInterestInfo = async (interests, city, date) => {
   // Maps through our interests, formats the URL for the request and calls requestTMInfo which makes an API call for each interest
-  const requests = interests.map( (interest) => {
-    const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&apikey=${process.env.TM_API_KEY}`;
+  const requests = interests.map((interest) => {
+    const url = `${process.env.TM_API_URL}/events.json?keyword=${city} ${interest}&localStartDateTime=${date}&sort=date,asc&apikey=${process.env.TM_API_KEY}`;
     return requestTMInfo(url) // Async function that gets the TM info from API
-    .then((a) => {
-      return a // Returns the info.
+      .then((a) => {
+        return a // Returns the info.
       }).catch(() => console.log("An error occured when requesting interest info..."))
   })
   return Promise.all(requests) // Waiting for all the requests to get resolved.
@@ -89,25 +89,26 @@ async function handleGetEvents(req, res) {
   console.log('get hit')
   verifyUser(req, async (err, user) => {
     if (err) {
-        res.send('invalid token');
+      res.send('invalid token');
     } else {
       console.log('req.body: ', req.body);
-      const { city } = req.body;                // Gets our users city
-      const { interests } = req.body;           // Gets our users interests
+      const { city } = req.body;                // Gets user's city, interests, and date
+      const { interests } = req.body;
+      const { date } = req.body;
       let returnedEvents = [];                  // Makes an empty array to house our gotten and formatted events
       try {
-        requestInterestInfo(interests, city)    // Passes our users city and interests into the requestInterestInfo funct
-          .then( returned => { 
+        requestInterestInfo(interests, city, date)    // Passes user's city and interests into the requestInterestInfo funct
+          .then(returned => {
             returned.forEach(returnedEventArray => returnedEvents = [...returnedEventArray, ...returnedEvents]) // Takes each returned event array and adds it to returnedEvents
-            }) 
-          .then(() => returnedEvents.sort( (a, b) => { // Sorts the 'returnedEvents' array by start time
+          })
+          .then(() => returnedEvents.sort((a, b) => { // Sorts the 'returnedEvents' array by start time
             var c = new Date(a.startTime);
             var d = new Date(b.startTime);
-            return c-d;
+            return c - d;
           }))
           .then(() => returnedEvents.length > 0 ? // Checks to make sure that the 'returnedEvents' array is not empty before sending
-            res.status(200).send(returnedEvents) : 
-            res.status(500).send('server error'))       
+            res.status(200).send(returnedEvents) :
+            res.status(500).send('server error'))
       } catch (err) {
         console.log(err);
         res.status(500).send('server error');
