@@ -32,7 +32,10 @@ class Event {
       state: "Undefined", // 'name' is also available instead
       zip: "Undefined"
     };
-    this.startTime = eventDataFull.dates.start.dateTime || "Undefined"; // is an object of this form:
+    this.startTime = eventDataFull.dates.start.dateTime || "Undefined";
+    this.localTime = eventDataFull.dates.start.localTime || "Undefined";
+    this.localDate = eventDataFull.dates.start.localDate || "Undefined";
+
     /*
             "localDate": "2021-12-25",
             "localTime": "15:00:00",
