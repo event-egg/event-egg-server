@@ -4,11 +4,10 @@ const User = require('../models/userModel.js');
 const verifyUser = require('../auth');
 
 async function getUserData(req, res) {
-  console.log('get hit')
   verifyUser(req, async (err, user) => {
-        if (err) {
-          res.send('invalid token');
-        } else {
+    if (err) {
+      res.send('invalid token');
+    } else {
       const { email } = req.query;
       try {
         let retrievedUser = await User.findOne({ email: email });
