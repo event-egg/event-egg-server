@@ -33,7 +33,7 @@ class Event {
       zip: "Undefined"
     };
     this.startTime = eventDataFull.dates.start.dateTime || "Undefined"; // this is Greenwich, England time @ prime meridian, 8hrs ahead of the time in Los Angeles
-    this.localTime = eventDataFull.dates.start.localTime || "Undefined"; 
+    this.localTime = eventDataFull.dates.start.localTime || "Undefined";
     this.localDate = eventDataFull.dates.start.localDate || "Undefined";
 
     /*
@@ -65,7 +65,6 @@ From client search:
 // Makes the API call for each interest, formats the returned data
 const requestTMInfo = async (url) => {
   try {
-    console.log(`Requesting ${url}`);
     const eventInfo = await axios(url);
     const returnedEvents = eventInfo.data._embedded.events
     const formattedEventsArray = returnedEvents.map(eventObj => new Event(eventObj));
@@ -89,12 +88,10 @@ const requestInterestInfo = async (interests, city, date) => {
 
 
 async function handleGetEvents(req, res) {
-  console.log('get hit')
   verifyUser(req, async (err, user) => {
     if (err) {
       res.send('invalid token');
     } else {
-      console.log('req.body: ', req.body);
       const { city } = req.body;                // Gets user's city, interests, and date
       const { interests } = req.body;
       const { date } = req.body;

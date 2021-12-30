@@ -39,15 +39,13 @@ app.delete('/user/:id', deleteUser); // deletes data
 app.delete('/events/:id', deleteEvent); // deletes data
 app.patch('/user/:id', updateUser); // updates data
 
-async function handleTest(req, res){
+async function handleTest(req, res) {
   verifyUser(req, async (err, user) => {
     if (err) {
-      console.log('test error!')
       res.send('Invalid Token');
-    } else { 
+    } else {
       try {
-      console.log('test works!');
-      res.status(200).send('test works!');
+        res.status(200).send('test works!');
       } catch (e) {
         res.status(500).send('Server Error');
       }
