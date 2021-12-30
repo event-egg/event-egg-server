@@ -3,17 +3,17 @@
 const User = require('../models/userModel.js');
 const verifyUser = require('../auth');
 
-async function createUser(request, response) {
-  verifyUser(request, async (err, user) => {
+async function createUser(req, res) {
+  verifyUser(req, async (err, user) => {
     if (err) {
-      response.status(500).send(err);
-      response.send('invalid token');
+      res.status(500).send(err);
+      res.send('invalid token');
     } else {
   try {
-    const madeUser = await User.create({ ...request.body });
-    response.status(200).send(madeUser);
+    const madeUser = await User.create({ ...req.body });
+    res.status(200).send(madeUser);
   } catch (err) {
-    response.status(500).send('server error');
+    res.status(500).send('server error');
   }
     }
   })

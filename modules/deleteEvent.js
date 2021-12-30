@@ -2,23 +2,22 @@
 const User = require('../models/userModel.js');
 const verifyUser = require('../auth');
 
-async function deleteEvent(request, response) {
+async function deleteEvent(req, res) {
 
-  verifyUser(request, async (err, user) => {
+  verifyUser(req, async (err, user) => {
     if (err) {
-      response.send('Invalid Token');
+      res.send('Invalid Token');
     } else {
-      const { id } = request.params;
+      const { id } = req.params;
       try {
         const updatedUserAndEvents = await User.findByIdAndUpdate(id, {
           $pull: {
-            savedEvents: { ...request.body }
+            savedEvents: { ...req.body }
           }
-        }, {new: true})
-        console.log('deleted');
-        response.status(200).send(updatedUserAndEvents);
+        }, { new: true })
+        res.status(200).send(updatedUserAndEvents);
       } catch (e) {
-        response.status(500).send('Server Error');
+        res.status(500).send('Server Error');
       }
     }
   })

@@ -3,19 +3,18 @@
 const User = require('../models/userModel.js');
 const verifyUser = require('../auth');
 
-async function getUserData(request, response) {
-  console.log('get hit')
-  verifyUser(request, async (err, user) => {
-        if (err) {
-          response.send('invalid token');
-        } else {
-      const { email } = request.query;
+async function getUserData(req, res) {
+  verifyUser(req, async (err, user) => {
+    if (err) {
+      res.send('invalid token');
+    } else {
+      const { email } = req.query;
       try {
         let retrievedUser = await User.findOne({ email: email });
-        retrievedUser === null ? response.status(200).send({}) : response.status(200).send(retrievedUser);
+        retrievedUser === null ? res.status(200).send({}) : res.status(200).send(retrievedUser);
       } catch (err) {
         console.log(err);
-        response.status(500).send('server error');
+        res.status(500).send('server error');
       }
     }
   })
