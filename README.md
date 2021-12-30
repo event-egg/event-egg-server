@@ -1,16 +1,23 @@
 # event-egg-server
-Server side application
+Server side application, which handles the API requests, takes that returned data and fits it into a certain shape to send back to the front end. This server also handles all the conversing with MongoDB, to include Create, Read, Update, and Delete functionality. This serves as our mediary between our persistent MongoDB as well as the client application.
 
 ## Changelog
-<!--
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
-12.20.2021 4:00PM - Connected to MongoDB with seed.js
-12.20.2021 4:30PM - Deployed on Heroku
+Please check out the [GitHub](https://github.com/event-egg/event-egg-server/pulls?q=is%3Apr+is%3Aclosed) for this project to check out the various changes!
 
+## Tools Used 
+- Mongoose
+- MongoDB
+- Auth0
+- Cors
+- Express
+
+For this back end we used Mongoose as well as MongoDB for altering data in MongoDB and data persistence, respectively. This backend application takes advantage of Auth0 to ensure that requests to the database/TicketMaster API cannot be done unless the user is authenticated. 
 
 ## Data Structure
 Data coming back from the TicketMaster API query will be structured like this:
 
+
+```
 response = {
   "_embedded": {
     "events": [
@@ -60,21 +67,4 @@ response = {
     ]
   }
 }
-
-## TO DO ITEMS FOR PROJECT BOARD
-client logs in-->
-Create new user preferences 
-Update preferences
-Removing un-favorited events from user object using DELETE method (find by event id and delete)
-Stretch: Delete user
-Auth0 implementation across all
-API
-  build query string based on user search/preferences/parameters
-  cache (or return?) next page of search results upon search to 
-
-## DONE:
-create new user with post
-get user from DB (using email address to search collection)
-
-## STRETCH:
-save queries to user profile and render these past queries when search bar is used
+```
