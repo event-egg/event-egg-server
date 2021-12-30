@@ -20,12 +20,14 @@ function getKey(header, callback) {
 
 
 // verify user on route
+
 function verifyUser(req, callback) {
   try {
     // define token from req header
     const token = req.headers.authorization.split(' ')[1];
+   // console.log(token);
     // from jsonWebToken docs
-    jwt.verify(token, getKey, {}, callback);
+    jwt.verify(token, getKey, {}, callback); 
   } catch (e) {
     callback('Not Authorized');
   }

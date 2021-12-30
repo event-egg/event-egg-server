@@ -9,12 +9,14 @@ async function createEvent(req, res) {
       res.send('Invalid Token');
     } else {
       const { id } = req.params;
+      console.log('req whole', req.body.name);
       try {
         const updatedUserAndEvents = await User.findByIdAndUpdate(id, {
           $push: {
             savedEvents: { ...req.body }
           }
-        }, { new: true })
+        }, {new: true})
+        // console.log('UpdatedUandE:', updatedUserAndEvents);
         res.status(200).send(updatedUserAndEvents);
       } catch (e) {
         res.status(500).send('Server Error');

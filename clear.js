@@ -8,6 +8,7 @@ async function clear() {
   try {
     await Event.deleteMany({});
     await User.deleteMany({});
+    console.log('events/users cleared');
   } catch (err) {
     console.error(err);
   } finally {
