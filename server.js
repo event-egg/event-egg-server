@@ -15,7 +15,7 @@ const handleGetEvents = require('./modules/getEvents');
 
 const app = express();
 app.use(cors());
-app.options('*', cors());  //<--------- Had to add to get auth0 working
+app.options('*', cors());  //<-------- Had to add to get auth0 working
 app.use(express.json());
 
 const verifyUser = require('./auth');
