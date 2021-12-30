@@ -14,7 +14,8 @@ async function deleteEvent(req, res) {
           $pull: {
             savedEvents: { ...req.body }
           }
-        }, { new: true })
+        }, {new: true})
+        console.log('deleted');
         res.status(200).send(updatedUserAndEvents);
       } catch (e) {
         res.status(500).send('Server Error');

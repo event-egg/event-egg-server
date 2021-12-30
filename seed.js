@@ -34,6 +34,7 @@ async function seed() {
       }
     ]
   });
+  console.log('"Daniel, created" - God');
 
   mongoose.disconnect();
 }
